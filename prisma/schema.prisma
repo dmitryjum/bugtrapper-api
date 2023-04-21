@@ -1,0 +1,6 @@
+model Error {
+  id    Int     @id @default(autoincrement())
+  message String
+  error_details Json?
+  application_id String?
+}
