@@ -3,7 +3,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Errors {
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Error {
   id              Int     @id @default(autoincrement())
   message         String  @db.VarChar(255)
   error_details   Json?
