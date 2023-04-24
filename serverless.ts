@@ -1,11 +1,17 @@
 import type { AWS } from '@serverless/typescript';
 
 import hello from '@functions/hello';
+import record_exceptions from '@functions/record_exceptions';
 
 const serverlessConfiguration: AWS = {
   service: 'bugtrapper-api',
   frameworkVersion: '3',
-  plugins: ['serverless-esbuild', 'serverless-offline'],
+  plugins:
+    [
+      'serverless-esbuild',
+      'serverless-offline',
+      'serverless-dotenv-plugin'
+    ],
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',
@@ -19,7 +25,7 @@ const serverlessConfiguration: AWS = {
     },
   },
   // import the function via paths
-  functions: { hello },
+  functions: { hello, record_exceptions },
   package: { individually: true },
   custom: {
     esbuild: {

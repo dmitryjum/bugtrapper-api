@@ -1,6 +1,11 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
 model Error {
-  id    Int     @id @default(autoincrement())
-  message String
-  error_details Json?
-  application_id String?
+  id              Int     @id @default(autoincrement())
+  message         String  @db.VarChar(255)
+  error_details   Json?
+  application_id  String?
 }
