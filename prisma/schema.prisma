@@ -3,7 +3,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Error {
+model Errors {
   id              Int     @id @default(autoincrement())
   message         String  @db.VarChar(255)
   error_details   Json?
