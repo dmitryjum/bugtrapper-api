@@ -8,13 +8,12 @@ const prisma = new PrismaClient();
 const record_exceptions: APIGatewayProxyHandler = async (event, _context) => {
   try {
     // Extract the request body from the event
-    const { message, error_details, application_id } = JSON.parse(event.body);
+    const { message, error_details, application_id } = event.body;
 
     // Insert the error data into the errors table using Prisma
     const errorObj = await prisma.error.create({
       data: { message, error_details, application_id }
     });
-    console.log(errorObj)
     // Return a success response
     return formatJSONResponse({
       message: 'Error recorded successfully',
