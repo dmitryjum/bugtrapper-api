@@ -38,6 +38,10 @@ const serverlessConfiguration: AWS = {
       platform: 'node',
       concurrency: 10,
     },
+    'serverless-offline': {
+      httpPort: 3002,
+      lambdaPort: 4000
+    }
   },
 };
 

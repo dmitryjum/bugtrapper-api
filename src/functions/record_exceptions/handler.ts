@@ -6,11 +6,13 @@ import { middyfy } from '@libs/lambda';
 const prisma = new PrismaClient();
 
 const record_exceptions: APIGatewayProxyHandler = async (event, _context) => {
-  try {
+  // try {
     // Extract the request body from the event
     const { message, error_details, application_id } = event.body;
 
     // Insert the error data into the errors table using Prisma
+    console.log(event.body);
+    console.log(message)
     const errorObj = await prisma.error.create({
       data: { message, error_details, application_id }
     });
@@ -19,13 +21,13 @@ const record_exceptions: APIGatewayProxyHandler = async (event, _context) => {
       message: 'Error recorded successfully',
       event,
     })
-  } catch (error) {
-    // Return an error response
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: 'Failed to record error' }),
-    };
-  }
+  // } catch (error) {
+  //   // Return an error response
+  //   return {
+  //     statusCode: 500,
+  //     body: JSON.stringify({ error: 'Failed to record error' }),
+  //   };
+  // }
 };
 
 export const main = middyfy(record_exceptions);
