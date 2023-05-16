@@ -1,33 +1,30 @@
-import { APIGatewayProxyHandler } from 'aws-lambda';
+import { APIGatewayProxyEvent } from 'aws-lambda';
 import { PrismaClient } from '@prisma/client';
 import { formatJSONResponse } from '@libs/api-gateway';
 import { middyfy } from '@libs/lambda';
+import Error from '../../models/Error';
 
 const prisma = new PrismaClient();
-
-const record_exceptions: APIGatewayProxyHandler = async (event, _context) => {
-  // try {
-    // Extract the request body from the event
+interface BugtrapperAPIGatewayProxyEvent extends Omit<APIGatewayProxyEvent, 'body'> {
+  body: Error
+}
+const record_exceptions = async (event: BugtrapperAPIGatewayProxyEvent) => {
+  try {
     const { message, error_details, application_id } = event.body;
 
-    // Insert the error data into the errors table using Prisma
-    console.log(event.body);
-    console.log(message)
-    const errorObj = await prisma.error.create({
+    await prisma.error.create({
       data: { message, error_details, application_id }
     });
-    // Return a success response
     return formatJSONResponse({
       message: 'Error recorded successfully',
       event,
     })
-  // } catch (error) {
-  //   // Return an error response
-  //   return {
-  //     statusCode: 500,
-  //     body: JSON.stringify({ error: 'Failed to record error' }),
-  //   };
-  // }
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify(error),
+    };
+  }
 };
 
 export const main = middyfy(record_exceptions);
